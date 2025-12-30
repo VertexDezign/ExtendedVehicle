@@ -1,5 +1,7 @@
 # ExtendedVehicle
 
+[![GitHub Release](https://img.shields.io/github/v/release/VertexDezign/ExtendedVehicle?include_prereleases)](https://github.com/VertexDezign/ExtendedVehicle/releases/latest)
+
 A Farming Simulator 25 mod that provides extended vehicle functionality, focusing on advanced lighting and sound controls, particularly useful for emergency services and utility vehicles.
 
 ## Features
