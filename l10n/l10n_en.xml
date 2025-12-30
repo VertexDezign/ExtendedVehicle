@@ -9,5 +9,6 @@
         <text name="input_VD_EV_TOGGLE_SIREN" text="Toggle siren sound"/>
         <text name="input_VD_EV_SWITCH_SIREN" text="Switch siren sound"/>
         <text name="input_VD_EV_AIR_HORN" text="Air Horn"/>
+        <text name="configuration_soundGroup" text="Sound selection"/>
     </texts>
 </l10n>
