@@ -14,6 +14,7 @@ local modName = g_currentModName
 local sourceFiles = {
   -- Utils
   "utils/TableUtils.lua",
+  "utils/ExtendedVehicleAnimation.lua",
 
   -- Events
   "events/CurrentExtendedSoundEvent.lua",

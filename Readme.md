@@ -45,6 +45,8 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
         <!-- name: identifier for the group -->
         <!-- toggleInputButton: the action name to trigger this group -->
         <beaconLightGroup name="HWS" toggleInputButton="VD_EV_TOGGLE_RWS">
+            <!-- optional animation to play when the group is triggered -->
+            <animation name="HWS_Button" speedScale="1.0" />
             <!-- beaconLight: BeacnLight definition is the same as in the vanilla vehicle XML -->
             <beaconLight realLight="0>1|5|0|2|1">
                 <staticLight node="0>1|5|0|2|0" intensity="100" multiBlink="true"
@@ -73,6 +75,8 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
         <!-- switchInputButton: cycles through sounds within the group -->
         <soundGroup name="SIREN" toggleInputButton="VD_EV_TOGGLE_SIREN"
             switchInputButton="VD_EV_SWITCH_SIREN">
+            <!-- optional animation to play when the group is triggered -->
+            <animation name="Siren_Button" speedScale="1.0" />
             <extendedSound>
                 <!-- sound: sound definition is the same as in the vanilla vehicle XML -->
                 <sound file="sounds/e_horn.ogg" pitchScale="1" volumeScale="2.5"
