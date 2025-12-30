@@ -21,6 +21,8 @@ ExtendedVehicle.INPUT_MODE = {
 }
 
 function ExtendedVehicle.initSpecialization()
+  g_vehicleConfigurationManager:addConfigurationType("soundGroup", g_i18n:getText("configuration_soundGroup"), "extendedVehicle", VehicleConfigurationItem)
+
   local schema = Vehicle.xmlSchema
 
   schema:setXMLSpecializationType("ExtendedVehicle")
@@ -34,7 +36,8 @@ function ExtendedVehicle.initSpecialization()
 
   BeaconLight.registerVehicleXMLPaths(schema, beaconLightGroupKey .. ".beaconLight(?)")
 
-  local soundGroupKey = "vehicle.extendedVehicle.soundGroups.soundGroup(?)"
+  local soundGroupConfigKey = "vehicle.extendedVehicle.soundGroupConfigurations.soundGroupConfiguration(?)"
+  local soundGroupKey = soundGroupConfigKey .. ".soundGroup(?)"
   schema:register(XMLValueType.STRING, soundGroupKey .. "#name", "Sound group name", nil, true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#inputMode", "If it is a toggle or a button (SWITCH, BUTTON)", "SWITCH", true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#toggleInputButton", "Toggle sound group input button", nil, true)
@@ -49,8 +52,8 @@ function ExtendedVehicle.initSpecialization()
 
   -- add to vehicle savegame schema
   local schemaSavegame = Vehicle.xmlSchemaSavegame
-  local savegameSoundGroupKey = ("vehicles.vehicle(?).%s.extendedVehicle.soundGroups.soundGroup(?)"):format(g_extendedVehicleModName)
-  schemaSavegame:register(XMLValueType.INT, savegameSoundGroupKey .. "#currentSoundIndex", "Current sound index", 0)
+  local savegameSoundGroupKey = ("vehicles.vehicle(?).%s.extendedVehicle.soundGroupConfigurations.soundGroupConfiguration(?)"):format(g_extendedVehicleModName)
+  schemaSavegame:register(XMLValueType.INT, savegameSoundGroupKey .. ".soundGroup(?)#currentSoundIndex", "Current sound index", 0)
 end
 
 function ExtendedVehicle.prerequisitesPresent(specializations)
@@ -106,10 +109,11 @@ function ExtendedVehicle:onLoad(savegame)
   spec.soundGroupsBySwitchInput = {}
   spec.extendedSounds = {}
 
-  self.xmlFile:iterate("vehicle.extendedVehicle.soundGroups.soundGroup", function (_, key)
+  local soundGroupConfigurationId = self.configurations["soundGroup"] or 1
+  local configKey = string.format("vehicle.extendedVehicle.soundGroupConfigurations.soundGroupConfiguration(%d)", soundGroupConfigurationId - 1)
+  self.xmlFile:iterate(configKey .. ".soundGroup", function (_, key)
     self:loadSoundGroupFromXML(self.xmlFile, key)
   end)
-
 end
 
 ---Called after load
@@ -119,9 +123,10 @@ function ExtendedVehicle:onPostLoad(savegame)
 
   if savegame ~= nil and not savegame.resetVehicles then
     local xmlFile = savegame.xmlFile
-    local key = ("%s.%s.extendedVehicle"):format(savegame.key, g_extendedVehicleModName)
+    local soundGroupConfigurationId = self.configurations["soundGroup"] or 1
+    local key = ("%s.%s.extendedVehicle.soundGroupConfigurations.soundGroupConfiguration(%d)"):format(savegame.key, g_extendedVehicleModName, soundGroupConfigurationId - 1)
 
-    xmlFile:iterate(key .. ".soundGroups.soundGroup", function (index, soundGroupKey)
+    xmlFile:iterate(key .. ".soundGroup", function (index, soundGroupKey)
       local soundGroup = spec.soundGroups[index]
       if soundGroup ~= nil then
         local currentSoundIndex = xmlFile:getValue(soundGroupKey .. "#currentSoundIndex", soundGroup.currentSoundIndex)
@@ -134,8 +139,9 @@ end
 function ExtendedVehicle:saveToXMLFile(xmlFile, key, usedModNames)
   local spec = self.spec_extendedVehicle
 
+  local soundGroupConfigurationId = self.configurations["soundGroup"] or 1
   for i, soundGroup in ipairs(spec.soundGroups) do
-    local soundGroupKey = string.format("%s.soundGroups.soundGroup(%d)", key, i - 1)
+    local soundGroupKey = string.format("%s.soundGroupConfigurations.soundGroupConfiguration(%d).soundGroup(%d)", key, soundGroupConfigurationId - 1, i - 1)
     xmlFile:setValue(soundGroupKey .. "#currentSoundIndex", soundGroup.currentSoundIndex)
   end
 end

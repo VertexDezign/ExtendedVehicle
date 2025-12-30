@@ -70,49 +70,52 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
         </beaconLightGroup>
     </beaconLightGroups>
 
-    <soundGroups>
-        <!-- toggleInputButton: switches the sound on/off -->
-        <!-- switchInputButton: cycles through sounds within the group -->
-        <soundGroup name="SIREN" toggleInputButton="VD_EV_TOGGLE_SIREN"
-            switchInputButton="VD_EV_SWITCH_SIREN">
-            <!-- optional animation to play when the group is triggered -->
-            <animation name="Siren_Button" speedScale="1.0" />
-            <extendedSound>
-                <!-- sound: sound definition is the same as in the vanilla vehicle XML -->
-                <sound file="sounds/e_horn.ogg" pitchScale="1" volumeScale="2.5"
-                    indoorVolume="0.035" outdoorVolume="0.1" range="30" innerRange="1"
-                    pitchMin="0.8" pitchMax="1.5"
-                    indoorLowpassGain="1" outdoorLowpassGain="1"
-                    indoorLowpassCutoffFrequencyGain="5000.0"
-                    indoorLowpassCutoffFrequencyResonance="2.0"
-                    outdoorLowpassCutoffFrequencyGain="5000.0"
-                    outdoorLowpassCutoffFrequencyResonance="2.0" />
-            </extendedSound>
-            <extendedSound>
-                <sound file="sounds/pressluft.ogg" pitchScale="1.0"
-                    volumeScale="14"
-                    indoorVolume="0.035" outdoorVolume="1" range="75" innerRange="1"
-                    pitchMin="0.8" pitchMax="1.5"
-                    indoorLowpassGain="1" outdoorLowpassGain="1"
-                    indoorLowpassCutoffFrequencyGain="5000.0"
-                    indoorLowpassCutoffFrequencyResonance="2.0"
-                    outdoorLowpassCutoffFrequencyGain="5000.0"
-                    outdoorLowpassCutoffFrequencyResonance="2.0" />
-            </extendedSound>
-        </soundGroup>
-        <soundGroup name="Bullhorn" toggleInputButton="VD_EV_AIR_HORN" inputMode="BUTTON">
-            <extendedSound>
-                <sound file="sounds/bullhorn.ogg" pitchScale="1" volumeScale="2.5"
-                       indoorVolume="0.035" outdoorVolume="0.1" range="30" innerRange="1"
-                       pitchMin="0.8" pitchMax="1.5"
-                       indoorLowpassGain="1" outdoorLowpassGain="1"
-                       indoorLowpassCutoffFrequencyGain="5000.0"
-                       indoorLowpassCutoffFrequencyResonance="2.0"
-                       outdoorLowpassCutoffFrequencyGain="5000.0"
-                       outdoorLowpassCutoffFrequencyResonance="2.0" />
-            </extendedSound>
-        </soundGroup>
-    </soundGroups>
+    <soundGroupConfigurations>
+        <!-- name: optional identifier for the configuration -->
+        <soundGroupConfiguration name="$l10n_configuration_EU">
+            <!-- toggleInputButton: switches the sound on/off -->
+            <!-- switchInputButton: cycles through sounds within the group -->
+            <soundGroup name="SIREN" toggleInputButton="VD_EV_TOGGLE_SIREN"
+                switchInputButton="VD_EV_SWITCH_SIREN">
+                <!-- optional animation to play when the group is triggered -->
+                <animation name="Siren_Button" speedScale="1.0" />
+                <extendedSound>
+                    <!-- sound: sound definition is the same as in the vanilla vehicle XML -->
+                    <sound file="sounds/e_horn.ogg" pitchScale="1" volumeScale="2.5"
+                        indoorVolume="0.035" outdoorVolume="0.1" range="30" innerRange="1"
+                        pitchMin="0.8" pitchMax="1.5"
+                        indoorLowpassGain="1" outdoorLowpassGain="1"
+                        indoorLowpassCutoffFrequencyGain="5000.0"
+                        indoorLowpassCutoffFrequencyResonance="2.0"
+                        outdoorLowpassCutoffFrequencyGain="5000.0"
+                        outdoorLowpassCutoffFrequencyResonance="2.0" />
+                </extendedSound>
+                <extendedSound>
+                    <sound file="sounds/pressluft.ogg" pitchScale="1.0"
+                        volumeScale="14"
+                        indoorVolume="0.035" outdoorVolume="1" range="75" innerRange="1"
+                        pitchMin="0.8" pitchMax="1.5"
+                        indoorLowpassGain="1" outdoorLowpassGain="1"
+                        indoorLowpassCutoffFrequencyGain="5000.0"
+                        indoorLowpassCutoffFrequencyResonance="2.0"
+                        outdoorLowpassCutoffFrequencyGain="5000.0"
+                        outdoorLowpassCutoffFrequencyResonance="2.0" />
+                </extendedSound>
+            </soundGroup>
+            <soundGroup name="Bullhorn" toggleInputButton="VD_EV_AIR_HORN" inputMode="BUTTON">
+                <extendedSound>
+                    <sound file="sounds/bullhorn.ogg" pitchScale="1" volumeScale="2.5"
+                           indoorVolume="0.035" outdoorVolume="0.1" range="30" innerRange="1"
+                           pitchMin="0.8" pitchMax="1.5"
+                           indoorLowpassGain="1" outdoorLowpassGain="1"
+                           indoorLowpassCutoffFrequencyGain="5000.0"
+                           indoorLowpassCutoffFrequencyResonance="2.0"
+                           outdoorLowpassCutoffFrequencyGain="5000.0"
+                           outdoorLowpassCutoffFrequencyResonance="2.0" />
+                </extendedSound>
+            </soundGroup>
+        </soundGroupConfiguration>
+    </soundGroupConfigurations>
 </extendedVehicle>
 ```
 
@@ -124,6 +127,8 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
 - `toggleInputButton`: (String) The action binding to toggle/trigger the group.
 
 #### Sound Groups
+- `soundGroupConfiguration`: Container for a set of sound groups (allows vehicle configurations).
+- `soundGroup`: Sound group.
 - `name`: (String) Name of the group.
 - `inputMode`: (String) `SWITCH` (default) or `BUTTON`.
 - `toggleInputButton`: (String) The action binding to toggle/trigger the sound.
