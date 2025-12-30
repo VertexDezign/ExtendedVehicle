@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="105">
+    <author>VertexDezign</author>
+    <version>0.1.0.0</version>
+    <title>
+        <en>ExtendedVehicle</en>
+        <de>ExtendedVehicle</de>
+    </title>
+    <description>
+        <en>
+            <![CDATA[ExtendedVehicle specialization for advanced lighting and sound controls.]]>
+        </en>
+        <de>
+            <![CDATA[ExtendedVehicle-Spezialisierung für fortgeschrittene Licht- und Soundsteuerung.]]>
+        </de>
+    </description>
+    <iconFilename>icon_EV.png</iconFilename>
+    <multiplayer supported="true"/>
+    <l10n filenamePrefix="l10n/l10n" />
+    <extraSourceFiles>
+        <sourceFile filename="GrisuDebug.lua"/>
+        <sourceFile filename="main.lua"/>
+    </extraSourceFiles>
+
+    <specializations>
+        <specialization name="extendedVehicle" className="ExtendedVehicle" filename="ExtendedVehicle.lua"/>
+    </specializations>
+
+
+    <!-- Define some default actions for extended vehicle features, so that not every mod needs to define them -->
+    <actions>
+        <!-- beacons -->
+        <action name="VD_EV_TOGGLE_RWS" category="VEHICLE"/>
+        <action name="VD_EV_TOGGLE_STOPFLASH" category="VEHICLE"/>
+        <!-- sound -->
+        <action name="VD_EV_TOGGLE_SIREN" category="VEHICLE"/>
+        <action name="VD_EV_SWITCH_SIREN" category="VEHICLE"/>
+        <!-- AIR Horn or Bullhorn -->
+        <action name="VD_EV_AIR_HORN" category="VEHICLE"/>
+    </actions>
+
+    <inputBinding>
+        <actionBinding action="VD_EV_TOGGLE_RWS">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_KP_1"/>
+        </actionBinding>
+        <actionBinding action="VD_EV_TOGGLE_STOPFLASH">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_KP_2"/>
+        </actionBinding>
+        <actionBinding action="VD_EV_TOGGLE_SIREN">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_KP_1"/>
+        </actionBinding>
+        <actionBinding action="VD_EV_SWITCH_SIREN">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_KP_2"/>
+        </actionBinding>
+        <actionBinding action="VD_EV_AIR_HORN">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_KP_3"/>
+        </actionBinding>
+    </inputBinding>
+
+</modDesc>

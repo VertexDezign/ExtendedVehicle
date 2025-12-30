@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+    <texts>
+        <!-- Beacons -->
+        <text name="input_VD_EV_TOGGLE_RWS" text="Heckwarnsystem (HWS) umschalten"/>
+        <text name="input_VD_EV_TOGGLE_STOPFLASH" text="Stopblitz umschalten"/>
+
+        <!-- Sound -->
+        <text name="input_VD_EV_TOGGLE_SIREN" text="Sirene umschalten"/>
+        <text name="input_VD_EV_SWITCH_SIREN" text="Sirenen sound wechseln"/>
+        <text name="input_VD_EV_AIR_HORN" text="Bullhorn"/>
+    </texts>
+</l10n>
