@@ -45,11 +45,11 @@ Dokumentation und Updates: https://github.com/VertexDezign/ExtendedVehicle]]>
     </extraSourceFiles>
 
     <specializations>
-        <specialization name="pumpVehicle" className="PumpVehicle" filename="PumpVehicle.lua"/>
+        <specialization name="pumpVehicle" className="PumpVehicle" filename="src/vehicles/specializations/PumpVehicle.lua"/>
     </specializations>
 
     <handToolSpecializations>
-        <specialization name="handToolPumpLance" className="HandToolPumpLance" filename="HandToolPumpLance.lua"/>
+        <specialization name="handToolPumpLance" className="HandToolPumpLance" filename="src/handTools/specializations/HandToolPumpLance.lua"/>
     </handToolSpecializations>
 
     <handToolTypes>

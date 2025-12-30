@@ -32,7 +32,7 @@ local sourceFiles = {
   "src/extendedVehicle/sound/SoundGroupExtension.lua",
   "src/extendedVehicle/sound/events/CurrentExtendedSoundEvent.lua",
   "src/extendedVehicle/sound/events/ExtendedSoundEvent.lua",
-  "events/PumpVehicleEvent.lua",
+  "src/pumpVehicle/events/PumpVehicleEvent.lua",
 }
 
 -- create logger
