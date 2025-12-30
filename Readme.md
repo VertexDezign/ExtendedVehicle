@@ -141,6 +141,7 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
 
 ## Credits
 - **Author**: VertexDezign
+- **Development Assistant**: [Junie](https://www.jetbrains.com/ai/) (JetBrains AI)
 
 ### Idea / Inspiration
 - EmergencyPack by Creative Mesh
