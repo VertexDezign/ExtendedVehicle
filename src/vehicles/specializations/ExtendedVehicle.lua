@@ -53,7 +53,7 @@ function ExtendedVehicle.initSpecialization()
   -- add to vehicle savegame schema
   local schemaSavegame = Vehicle.xmlSchemaSavegame
   local savegameSoundGroupKey = ("vehicles.vehicle(?).%s.extendedVehicle.soundGroupConfigurations.soundGroupConfiguration(?)"):format(g_extendedVehicleModName)
-  schemaSavegame:register(XMLValueType.INT, savegameSoundGroupKey .. "#currentSoundIndex", "Current sound index", 0)
+  schemaSavegame:register(XMLValueType.INT, savegameSoundGroupKey .. ".soundGroup(?)#currentSoundIndex", "Current sound index", 0)
 end
 
 function ExtendedVehicle.prerequisitesPresent(specializations)
