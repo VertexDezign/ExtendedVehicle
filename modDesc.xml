@@ -44,6 +44,22 @@ Dokumentation und Updates: https://github.com/VertexDezign/ExtendedVehicle]]>
         <sourceFile filename="src/main.lua"/>
     </extraSourceFiles>
 
+    <specializations>
+        <specialization name="pumpVehicle" className="PumpVehicle" filename="PumpVehicle.lua"/>
+    </specializations>
+
+    <handToolSpecializations>
+        <specialization name="handToolPumpLance" className="HandToolPumpLance" filename="HandToolPumpLance.lua"/>
+    </handToolSpecializations>
+
+    <handToolTypes>
+        <type name="pumpLance" className="HandTool" filename="$dataS/scripts/handTools/HandTool.lua">
+            <specialization name="storable" />
+            <specialization name="tethered" />
+            <specialization name="handToolPumpLance" />
+        </type>
+    </handToolTypes>
+
     <!-- Define some default actions for extended vehicle features, so that not every mod needs to define them -->
     <actions>
         <!-- beacons -->

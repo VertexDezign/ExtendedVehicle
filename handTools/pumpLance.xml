@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<handTool type="FS25_ExtendedVehicle.pumpLance" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../shared/xml/schema/handTool.xsd">
+    <annotation>Copyright (C) GIANTS Software GmbH, All Rights Reserved.</annotation>
+
+    <storeData>
+        <name>HDS 9/18-4 M</name>
+        <functions>
+            <function>$l10n_function_highPressureWasher</function>
+        </functions>
+        <image>$data/store/store_empty.png</image>
+        <price>4500</price>
+        <lifetime>1000</lifetime>
+        <rotation>0</rotation>
+        <brand>KAERCHER</brand>
+        <canBeSold>false</canBeSold>
+        <showInStore>false</showInStore>
+        <category>misc</category>
+        <species>HANDTOOL</species>
+    </storeData>
+
+    <base canCrouch="true" runMultiplier="0" mustBeHeld="true" canBeSaved="false">
+        <typeDesc>$l10n_typeDesc_highPressureWasherLance</typeDesc>
+        <actions activate="$l10n_action_highPressureWashTarget"/>
+        <filename>$data/handTools/kaercher/hds9184M/hds9184MLance.i3d</filename>
+        <sounds filename="$data/handTools/kaercher/hds9184M/sounds/hds9184MLance.xml"/>
+        <graphics node="graphics" lockFirstPerson="true"/>
+        <handNode node="handNode"/>
+        <firstPersonNode node="firstPersonNode"/>
+    </base>
+
+    <storable>
+        <holderType type="HPWLANCE" node="holderNode"/>
+    </storable>
+
+    <tethered warningText="$l10n_warning_hpwRangeRestriction" actionRange="7.5" range="10" />
+
+    <handToolPumpLance>
+        <lance raycastNode="raycast" washDistance="5" washMultiplier="3" />
+        <effects>
+            <effectNode effectNode="effectMesh" materialType="WASHER" />
+            <effectNode effectNode="dustEmitShape" effectClass="ParticleEffect" particleType="WASHER_WATER" emitCountScale="7000" />
+        </effects>
+    </handToolPumpLance>
+
+    <i3dMappings>
+        <i3dMapping id="hds9184M" node="0>" />
+        <i3dMapping id="graphics" node="0>0" />
+        <i3dMapping id="effectMesh" node="0>0|0|0" />
+        <i3dMapping id="dustEmitShape" node="0>0|0|1" />
+        <i3dMapping id="handNode" node="0>1" />
+        <i3dMapping id="leftHandRef" node="0>2" />
+        <i3dMapping id="holderNode" node="0>3" />
+        <i3dMapping id="raycast" node="0>4" />
+        <i3dMapping id="firstPersonNode" node="0>5" />
+    </i3dMappings>
+</handTool>

@@ -10,5 +10,7 @@
         <text name="input_VD_EV_SWITCH_SIREN" text="Switch siren sound"/>
         <text name="input_VD_EV_AIR_HORN" text="Air Horn"/>
         <text name="configuration_soundGroup" text="Sound selection"/>
+        <text name="action_turnOnPump" text="Turn on pump"/>
+        <text name="action_turnOffPump" text="Turn off pump"/>
     </texts>
 </l10n>

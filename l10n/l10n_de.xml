@@ -10,5 +10,7 @@
         <text name="input_VD_EV_SWITCH_SIREN" text="Sirenen sound wechseln"/>
         <text name="input_VD_EV_AIR_HORN" text="Bullhorn"/>
         <text name="configuration_soundGroup" text="Sound Auswahl"/>
+        <text name="action_turnOnPump" text="Pumpe einschalten"/>
+        <text name="action_turnOffPump" text="Pumpe ausschalten"/>
     </texts>
 </l10n>
