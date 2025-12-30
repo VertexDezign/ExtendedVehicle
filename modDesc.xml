@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="105">
     <author>VertexDezign</author>
-    <version>0.1.0.0</version>
+    <version>0.2.0.0</version>
     <title>
         <en>ExtendedVehicle</en>
         <de>ExtendedVehicle</de>
@@ -18,12 +18,12 @@
     <multiplayer supported="true"/>
     <l10n filenamePrefix="l10n/l10n" />
     <extraSourceFiles>
-        <sourceFile filename="GrisuDebug.lua"/>
-        <sourceFile filename="main.lua"/>
+        <sourceFile filename="src/utils/GrisuDebug.lua"/>
+        <sourceFile filename="src/main.lua"/>
     </extraSourceFiles>
 
     <specializations>
-        <specialization name="extendedVehicle" className="ExtendedVehicle" filename="ExtendedVehicle.lua"/>
+        <specialization name="extendedVehicle" className="ExtendedVehicle" filename="src/vehicles/specializations/ExtendedVehicle.lua"/>
     </specializations>
 
 

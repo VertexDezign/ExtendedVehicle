@@ -13,12 +13,13 @@ local modName = g_currentModName
 ---@type table<string> files to source.
 local sourceFiles = {
   -- Utils
-  "utils/TableUtils.lua",
+  "src/utils/TableUtils.lua",
+  "src/extendedVehicle/ExtendedVehicleAnimation.lua",
 
   -- Events
-  "events/CurrentExtendedSoundEvent.lua",
-  "events/ExtendedSoundEvent.lua",
-  "events/AdditionalBeaconLightsEvent.lua",
+  "src/extendedVehicle/events/CurrentExtendedSoundEvent.lua",
+  "src/extendedVehicle/events/ExtendedSoundEvent.lua",
+  "src/extendedVehicle/events/AdditionalBeaconLightsEvent.lua",
 }
 
 -- create logger

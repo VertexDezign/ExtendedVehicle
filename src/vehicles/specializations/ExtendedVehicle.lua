@@ -3,6 +3,8 @@
 ---@class ExtendedVehicleSpec
 ---@field debugger GrisuDebug
 ---@field actionEvents table
+---@field soundGroups table<integer, SoundGroup>
+---@field beaconLightGroups table<integer, BeaconLightGroup>
 
 ---@class ExtendedVehicle : Vehicle
 ---@field spec_extendedVehicle ExtendedVehicleSpec
@@ -28,6 +30,8 @@ function ExtendedVehicle.initSpecialization()
   schema:register(XMLValueType.STRING, beaconLightGroupKey .. "#inputMode", "If it is a toggle or a button (SWITCH, BUTTON)", "SWITCH", true)
   schema:register(XMLValueType.STRING, beaconLightGroupKey .. "#toggleInputButton", "Toggle beacon light group input button", nil, true)
 
+  ExtendedVehicleAnimation.registerXMLPaths(schema, beaconLightGroupKey .. ".animation")
+
   BeaconLight.registerVehicleXMLPaths(schema, beaconLightGroupKey .. ".beaconLight(?)")
 
   local soundGroupKey = "vehicle.extendedVehicle.soundGroups.soundGroup(?)"
@@ -35,6 +39,9 @@ function ExtendedVehicle.initSpecialization()
   schema:register(XMLValueType.STRING, soundGroupKey .. "#inputMode", "If it is a toggle or a button (SWITCH, BUTTON)", "SWITCH", true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#toggleInputButton", "Toggle sound group input button", nil, true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#switchInputButton", "Switch sound group input button")
+
+  ExtendedVehicleAnimation.registerXMLPaths(schema, soundGroupKey .. ".animation")
+
   schema:register(XMLValueType.STRING, soundGroupKey .. ".extendedSound(?)#name", "Sound name", nil, true)
   SoundManager.registerSampleXMLPaths(schema, soundGroupKey .. ".extendedSound(?)", "sound")
 
@@ -47,8 +54,7 @@ function ExtendedVehicle.initSpecialization()
 end
 
 function ExtendedVehicle.prerequisitesPresent(specializations)
-  --return SpecializationUtil.hasSpecialization(Enterable, specializations) -- TODO marker spec?
-  return true
+  return SpecializationUtil.hasSpecialization(AnimatedVehicle, specializations)
 end
 
 function ExtendedVehicle.registerEventListeners(vehicleType)
@@ -221,6 +227,12 @@ function ExtendedVehicle:loadSoundGroupFromXML(xmlFile, key)
     return
   end
 
+  ---@class SoundGroup
+  ---@field name string the name of the sound group
+  ---@field inputMode InputMode
+  ---@field toggleInputButton InputAction
+  ---@field switchInputButton InputAction
+  ---@field animation ExtendedVehicleAnimation
   local soundGroup = {}
   soundGroup.name = name
   soundGroup.inputMode = xmlFile:getValue(key .. "#inputMode", ExtendedVehicle.INPUT_MODE.SWITCH)
@@ -239,6 +251,11 @@ function ExtendedVehicle:loadSoundGroupFromXML(xmlFile, key)
 
   soundGroup.currentSoundIndex = 0
   soundGroup.extendedSounds = {}
+
+  local animation = ExtendedVehicleAnimation.new(self)
+  if animation:loadFromXML(xmlFile, key .. ".animation") then
+    soundGroup.animation = animation
+  end
 
   xmlFile:iterate(key .. ".extendedSound", function (_, soundKey)
     local entry = {}
@@ -349,6 +366,15 @@ function ExtendedVehicle:setExtendedSoundStateByIndex(index, state, noEventSend)
     else
       g_soundManager:stopSample(extendedSound.sound)
     end
+
+    for _, soundGroup in ipairs(spec.soundGroups) do
+      if soundGroup.animation ~= nil then
+        local currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
+        if currentExtendedSound == extendedSound then
+          soundGroup.animation:setState(state)
+        end
+      end
+    end
   end
 end
 
@@ -409,6 +435,8 @@ function ExtendedVehicle:loadBeaconLightGroupFromXML(xmlFile, key)
   ---@class BeaconLightGroup
   ---@field name string
   ---@field inputMode InputMode
+  ---@field toggleInputButton InputAction
+  ---@field animation ExtendedVehicleAnimation
   local beaconLightGroup = {}
   beaconLightGroup.name = name
   beaconLightGroup.inputMode = xmlFile:getValue(key .. "#inputMode", ExtendedVehicle.INPUT_MODE.SWITCH)
@@ -427,6 +455,11 @@ function ExtendedVehicle:loadBeaconLightGroupFromXML(xmlFile, key)
 
   beaconLightGroup.isActive = false
   beaconLightGroup.beaconLights = {}
+
+  local animation = ExtendedVehicleAnimation.new(self)
+  if animation:loadFromXML(xmlFile, key .. ".animation") then
+    beaconLightGroup.animation = animation
+  end
 
   xmlFile:iterate(key .. ".beaconLight", function (_, beaconKey)
     BeaconLight.loadFromVehicleXML(beaconLightGroup.beaconLights, xmlFile, beaconKey, self)
@@ -488,6 +521,10 @@ function ExtendedVehicle:setBeaconLightGroupState(index, state, noEventSend)
 
     for _, beaconLight in ipairs(beaconLightGroup.beaconLights) do
       beaconLight:setIsActive(state)
+    end
+
+    if beaconLightGroup.animation ~= nil then
+      beaconLightGroup.animation:setState(state)
     end
   end
 end
