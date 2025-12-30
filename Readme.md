@@ -14,21 +14,21 @@ A Farming Simulator 25 mod that provides extended vehicle functionality, focusin
 
 To use this mod, add the following to your `modDesc.xml`:
 
-* Add a dependency to FS25_ExtendedVehicle
+* Add a dependency to FS25_extendedVehicle
 * Add the `extendedVehicle` specialization to your `vehicleType`.
 
 #### Example ModDesc
 ````xml
 <dependencies>
-    <dependency>FS25_ExtendedVehicle</dependency>
+    <dependency>FS25_extendedVehicle</dependency>
 </dependencies>
 
 <vehicleTypes>
     <type name="someSpecialCar" parent="baseDrivable" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
-        <specialization name="FS25_ExtendedVehicle.extendedVehicle" />
+        <specialization name="FS25_extendedVehicle.extendedVehicle" />
     </type>
     <type name="someSpecialTrailer" parent="trailer" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
-        <specialization name="FS25_ExtendedVehicle.extendedVehicle" />
+        <specialization name="FS25_extendedVehicle.extendedVehicle" />
     </type>
 </vehicleTypes>
 ````
