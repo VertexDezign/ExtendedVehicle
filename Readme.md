@@ -73,6 +73,8 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
     <soundGroupConfigurations>
         <!-- name: optional identifier for the configuration -->
         <soundGroupConfiguration name="$l10n_configuration_EU">
+            <!-- optional object change, similar to design configs -->
+            <objectChange node="node" visibilityActive="true" visibilityInactive="false" />
             <!-- toggleInputButton: switches the sound on/off -->
             <!-- switchInputButton: cycles through sounds within the group -->
             <soundGroup name="SIREN" toggleInputButton="VD_EV_TOGGLE_SIREN"
