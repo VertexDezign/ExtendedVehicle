@@ -79,11 +79,16 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
             <objectChange node="node" visibilityActive="true" visibilityInactive="false" />
             <!-- toggleInputButton: switches the sound on/off -->
             <!-- switchInputButton: cycles through sounds within the group -->
+            <!-- playExtendedSoundAnimationOnToggle: If true, both animations will be played when the group is toggled, defaults to true 
+            if false, the animation of extendedSound is not played on toggle, only when switching -->
             <soundGroup name="SIREN" toggleInputButton="VD_EV_TOGGLE_SIREN"
-                switchInputButton="VD_EV_SWITCH_SIREN">
+                switchInputButton="VD_EV_SWITCH_SIREN"
+                playExtendedSoundAnimationOnToggle="true">
                 <!-- optional animation to play when the group is triggered -->
                 <animation name="Siren_Button" speedScale="1.0" />
                 <extendedSound>
+                    <!-- optional animation to play for each sound -->
+                    <animation name="Siren_Button" speedScale="1.0" />
                     <!-- sound: sound definition is the same as in the vanilla vehicle XML -->
                     <sound file="sounds/e_horn.ogg" pitchScale="1" volumeScale="2.5"
                         indoorVolume="0.035" outdoorVolume="0.1" range="30" innerRange="1"
@@ -95,6 +100,8 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
                         outdoorLowpassCutoffFrequencyResonance="2.0" />
                 </extendedSound>
                 <extendedSound>
+                    <!-- optional animation to play for each sound -->
+                    <animation name="Siren_Button" speedScale="1.0" />
                     <sound file="sounds/pressluft.ogg" pitchScale="1.0"
                         volumeScale="14"
                         indoorVolume="0.035" outdoorVolume="1" range="75" innerRange="1"

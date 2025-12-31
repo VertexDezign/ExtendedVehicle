@@ -66,3 +66,16 @@ function ExtendedVehicleAnimation:setState(state)
         self.vehicle:playAnimation(self.name, speed, self.vehicle:getAnimationTime(self.name), true)
     end
 end
+
+---Sets animation to state instantly
+---@param state boolean New state
+function ExtendedVehicleAnimation:setAtState(state)
+    if self.vehicle.setAnimationTime ~= nil then
+        local time = state and 1.0 or 0.0
+        if self.speedScale < 0 then
+            time = 1.0 - time
+        end
+
+        self.vehicle:setAnimationTime(self.name, time, true)
+    end
+end
