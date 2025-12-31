@@ -55,7 +55,7 @@ IF not exist "%dir7Zip%" (
             -xr!substance ^
             -xr!*.obj -xr!*.fbx -xr!*.txt -xr!*.md ^
             -xr!*.png -xr!*.psd -xr!*.tga !*.png -xr!*.gim -xr!*.pdn ^
-            -xr!.idea -xr!.vscode -xr!.run ^
+            -xr!.idea -xr!.vscode -xr!.run -xr!.reference ^
             -xr!LICENSE 
 
         echo.
