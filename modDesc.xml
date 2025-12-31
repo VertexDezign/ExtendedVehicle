@@ -8,10 +8,14 @@
     </title>
     <description>
         <en>
-            <![CDATA[ExtendedVehicle specialization for advanced lighting and sound controls.]]>
+            <![CDATA[ExtendedVehicle specialization for advanced lighting and sound controls. Features include beacon light groups, sound groups (sirens, air horns, or anything else), and pre-defined actions for emergency and utility vehicles.
+
+For more information and updates, visit our GitHub: https://github.com/VertexDezign/ExtendedVehicle]]>
         </en>
         <de>
-            <![CDATA[ExtendedVehicle-Spezialisierung für fortgeschrittene Licht- und Soundsteuerung.]]>
+            <![CDATA[ExtendedVehicle-Spezialisierung für fortgeschrittene Licht- und Soundsteuerung. Zu den Funktionen gehören Rundumleuchten-Gruppen, Sound-Gruppen (Sirenen, Presslufthörner oder sonstige) und vordefinierte Aktionen für Einsatz- und Kommunalfahrzeuge.
+
+Weitere Informationen und Updates finden Sie auf GitHub: https://github.com/VertexDezign/ExtendedVehicle]]>
         </de>
     </description>
     <iconFilename>icon_EV.png</iconFilename>
