@@ -42,10 +42,12 @@ function ExtendedVehicle.initSpecialization()
   schema:register(XMLValueType.STRING, soundGroupKey .. "#inputMode", "If it is a toggle or a button (SWITCH, BUTTON)", "SWITCH", true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#toggleInputButton", "Toggle sound group input button", nil, true)
   schema:register(XMLValueType.STRING, soundGroupKey .. "#switchInputButton", "Switch sound group input button")
+  schema:register(XMLValueType.BOOL, soundGroupKey .. "#playExtendedSoundAnimationOnToggle", "Play switch animation on toggle", true)
 
   ExtendedVehicleAnimation.registerXMLPaths(schema, soundGroupKey .. ".animation")
 
   schema:register(XMLValueType.STRING, soundGroupKey .. ".extendedSound(?)#name", "Sound name", nil, true)
+  ExtendedVehicleAnimation.registerXMLPaths(schema, soundGroupKey .. ".extendedSound(?).animation")
   SoundManager.registerSampleXMLPaths(schema, soundGroupKey .. ".extendedSound(?)", "sound")
 
   schema:setXMLSpecializationType()
@@ -129,10 +131,19 @@ function ExtendedVehicle:onPostLoad(savegame)
     xmlFile:iterate(key .. ".soundGroup", function (index, soundGroupKey)
       local soundGroup = spec.soundGroups[index]
       if soundGroup ~= nil then
-        local currentSoundIndex = xmlFile:getValue(soundGroupKey .. "#currentSoundIndex", soundGroup.currentSoundIndex)
-        self:setSoundGroupCurrentSound(index, currentSoundIndex, true)
+        soundGroup.currentSoundIndex = xmlFile:getValue(soundGroupKey .. "#currentSoundIndex", soundGroup.currentSoundIndex)
       end
     end)
+  end
+
+  for _, soundGroup in ipairs(spec.soundGroups) do
+    if not soundGroup.playExtendedSoundAnimationOnToggle then
+      local currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
+      spec.debugger:debug("Setting animation for soundGroup %s and currentExtendedSound %s", soundGroup.name, currentExtendedSound)
+      if currentExtendedSound ~= nil and currentExtendedSound.animation ~= nil then
+        currentExtendedSound.animation:setState(true)
+      end
+    end
   end
 end
 
@@ -189,6 +200,13 @@ function ExtendedVehicle:onReadStream(streamId, connection)
 
   for _, soundGroup in ipairs(spec.soundGroups) do
     soundGroup.currentSoundIndex = streamReadUInt8(streamId)
+
+    if not soundGroup.playExtendedSoundAnimationOnToggle then
+      local currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
+      if currentExtendedSound ~= nil and currentExtendedSound.animation ~= nil then
+        currentExtendedSound.animation:setState(true)
+      end
+    end
   end
 
   for index in ipairs(spec.extendedSounds) do
@@ -238,10 +256,12 @@ function ExtendedVehicle:loadSoundGroupFromXML(xmlFile, key)
   ---@field inputMode InputMode
   ---@field toggleInputButton InputAction
   ---@field switchInputButton InputAction
+  ---@field playExtendedSoundAnimationOnToggle boolean
   ---@field animation ExtendedVehicleAnimation
   local soundGroup = {}
   soundGroup.name = name
   soundGroup.inputMode = xmlFile:getValue(key .. "#inputMode", ExtendedVehicle.INPUT_MODE.SWITCH)
+  soundGroup.playExtendedSoundAnimationOnToggle = xmlFile:getValue(key .. "#playExtendedSoundAnimationOnToggle", true)
 
   local toggleInputButtonStr = xmlFile:getValue(key .. "#toggleInputButton")
   if toggleInputButtonStr == nil then
@@ -304,6 +324,11 @@ function ExtendedVehicle:loadExtendedSoundFromXML(xmlFile, key, entry)
 
   entry.index = #spec.extendedSounds + 1
   entry.isPlaying = false
+
+  local animation = ExtendedVehicleAnimation.new(self)
+  if animation:loadFromXML(xmlFile, key .. ".animation") then
+    entry.animation = animation
+  end
 
   if self.isClient then
     entry.sound = g_soundManager:loadSampleFromXML(xmlFile, key, "sound", self.baseDirectory, self.components, 0, AudioGroup.VEHICLE, self.i3dMappings, self)
@@ -374,10 +399,15 @@ function ExtendedVehicle:setExtendedSoundStateByIndex(index, state, noEventSend)
     end
 
     for _, soundGroup in ipairs(spec.soundGroups) do
-      if soundGroup.animation ~= nil then
-        local currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
-        if currentExtendedSound == extendedSound then
+      local currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
+      if currentExtendedSound == extendedSound then
+        if soundGroup.animation ~= nil then
           soundGroup.animation:setState(state)
+        end
+        if soundGroup.playExtendedSoundAnimationOnToggle then
+          if extendedSound.animation ~= nil then
+            extendedSound.animation:setState(state)
+          end
         end
       end
     end
@@ -402,22 +432,32 @@ function ExtendedVehicle:setSoundGroupCurrentSound(soundGroupIndex, index, noEve
 
   CurrentExtendedSoundEvent.sendEvent(self, soundGroupIndex, index, noEventSend)
   local soundWasPlaying = currentExtendedSound.isPlaying
+  local playExtendedSoundAnimationOnToggle = soundGroup.playExtendedSoundAnimationOnToggle
 
   -- deactivate current sound
+  if not playExtendedSoundAnimationOnToggle and currentExtendedSound.animation ~= nil then
+    currentExtendedSound.animation:setState(false)
+  end
+
   if soundWasPlaying then
     self:setExtendedSoundStateByIndex(currentExtendedSound.index, false, true)
   end
 
   soundGroup.currentSoundIndex = index
+  currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
+
+  if currentExtendedSound == nil then
+    return
+  end
 
   -- replay new current sound
-  if soundWasPlaying then
-    currentExtendedSound = self:getCurrentExtendedSound(soundGroup)
-
-    if currentExtendedSound == nil then
-      return
+  if not playExtendedSoundAnimationOnToggle then
+    if currentExtendedSound.animation ~= nil then
+      currentExtendedSound.animation:setState(true)
     end
+  end
 
+  if soundWasPlaying then
     self:setExtendedSoundStateByIndex(currentExtendedSound.index, true, true)
   end
 end
