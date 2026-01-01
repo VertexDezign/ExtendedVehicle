@@ -38,8 +38,36 @@ local function printSpecs()
   logger:tPrint("HandToolSpecs", g_handToolSpecializationManager:getSpecializations(), true)
 end
 
+local function installSpec(typeManager)
+  if typeManager.typeName == "vehicle" then
+    -- register spec
+    g_specializationManager:addSpecialization("extendedVehicle", "ExtendedVehicle", Utils.getFilename("src/vehicles/specializations/ExtendedVehicle.lua", modDirectory), nil)
+
+    -- add spec to vehicle types
+    local totalCount = 0
+    local modified = 0
+    for typeName, typeEntry in pairs(typeManager:getTypes()) do
+      totalCount = totalCount + 1
+      if SpecializationUtil.hasSpecialization(AnimatedVehicle, typeEntry.specializations) and
+          not SpecializationUtil.hasSpecialization(Rideable, typeEntry.specializations) and
+          not SpecializationUtil.hasSpecialization(ExtendedVehicle, typeEntry.specializations) then
+        typeManager:addSpecialization(typeName, modName .. ".extendedVehicle")
+        modified = modified + 1
+        logger:trace("Adding ExtendedVehicle spec to " .. typeName)
+      else
+        logger:trace("Not adding ExtendedVehicle spec to " .. typeName)
+      end
+    end
+
+    logger:info(string.format("Inserted ExtendedVehicle spec into %i of %i vehicle types", modified, totalCount))
+  end
+end
+
+
 local function init()
   -- install spec
+  TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, installSpec)
+
   --Mission00.load = Utils.prependedFunction(Mission00.load, printSpecs)
 
   logger:info("Initialization complete")
