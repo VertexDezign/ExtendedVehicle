@@ -2,6 +2,7 @@
 
 ---@class ExtendedVehicleSpec
 ---@field debugger GrisuDebug
+---@field active boolean
 ---@field actionEvents table
 ---@field soundGroups table<integer, SoundGroup>
 ---@field beaconLightGroups table<integer, BeaconLightGroup>
@@ -94,6 +95,7 @@ function ExtendedVehicle:onLoad(savegame)
   self.spec_extendedVehicle = {
     debugger = GrisuDebug:create("ExtendedVehicle"),
     actionEvents = {},
+    active = false,
   }
   local spec = self.spec_extendedVehicle
   spec.debugger:setLogLvl(GrisuDebug.TRACE)
@@ -122,6 +124,17 @@ end
 ---@param savegame table savegame
 function ExtendedVehicle:onPostLoad(savegame)
   local spec = self.spec_extendedVehicle
+
+  -- remove event listeners if extendedVehicle is not present on the vehicle
+  if not spec.active then
+    spec.debugger:trace("No extended vehicle configuration found on vehicle %s", self:getFullName())
+    SpecializationUtil.removeEventListener(self, "onReadStream", ExtendedVehicle)
+    SpecializationUtil.removeEventListener(self, "onWriteStream", ExtendedVehicle)
+    SpecializationUtil.removeEventListener(self, "onRegisterActionEvents", ExtendedVehicle)
+    SpecializationUtil.removeEventListener(self, "saveToXMLFile", ExtendedVehicle)
+
+    return
+  end
 
   if savegame ~= nil and not savegame.resetVehicles then
     local xmlFile = savegame.xmlFile
@@ -308,6 +321,7 @@ function ExtendedVehicle:loadSoundGroupFromXML(xmlFile, key)
 
   table.addElement(spec.soundGroups, soundGroup)
   spec.soundGroupsByToggleInput[soundGroup.toggleInputButton] = soundGroup
+  spec.active = true
 
   if soundGroup.switchInputButton ~= nil then
     spec.soundGroupsBySwitchInput[soundGroup.switchInputButton] = soundGroup
@@ -513,6 +527,7 @@ function ExtendedVehicle:loadBeaconLightGroupFromXML(xmlFile, key)
 
   table.addElement(spec.beaconLightGroups, beaconLightGroup)
   spec.beaconLightGroupsByToggleInput[beaconLightGroup.toggleInputButton] = beaconLightGroup
+  spec.active = true
 end
 
 ---Returns beaconLightGroup by toggle input
