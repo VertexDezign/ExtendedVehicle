@@ -158,7 +158,7 @@ function GrisuDebug:_tprint (tbl, indent, recursive)
     elseif (type(v) == "string") then
       toprint = toprint .. "\"" .. v .. "\",\r\n"
     elseif (type(v) == "table") then
-      if recursive and indent < 10 then
+      if recursive and indent < 15 then
         toprint = toprint .. self:_tprint(v, indent + 2, recursive) .. ",\r\n"
       else
         toprint = toprint .. "table, \r\n"

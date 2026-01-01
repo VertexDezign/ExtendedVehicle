@@ -8,12 +8,19 @@
 
 local modDirectory = g_currentModDirectory
 local modName = g_currentModName
+---@type ExtendedVehicleManager
+local modEnvironment
 
 ---Source files to load, there are loaded in order, so if there is a dependency to another file, at it after the file it requires
 ---@type table<string> files to source.
 local sourceFiles = {
   -- Utils
   "src/utils/TableUtils.lua",
+  -- xml injection
+  "src/misc/XMLInjectionsManager.lua",
+  -- manager
+  "src/misc/ExtendedVehicleManager.lua",
+
   "src/extendedVehicle/ExtendedVehicleAnimation.lua",
 
   -- Events
@@ -31,47 +38,94 @@ for _, file in ipairs(sourceFiles) do
   source(modDirectory .. file)
 end
 
--- save current mod name in global variable for later use in spec
-g_extendedVehicleModName = modName
-
-local function printSpecs()
-  logger:tPrint("HandToolSpecs", g_handToolSpecializationManager:getSpecializations(), true)
+---Returns true when the current mod env is loaded, false otherwise.
+local function isLoaded()
+  return modEnvironment ~= nil
 end
 
-local function installSpec(typeManager)
-  if typeManager.typeName == "vehicle" then
-    -- register spec
-    g_specializationManager:addSpecialization("extendedVehicle", "ExtendedVehicle", Utils.getFilename("src/vehicles/specializations/ExtendedVehicle.lua", modDirectory), nil)
+---Load the mod.
+local function load(mission)
+  assert(modEnvironment == nil)
+  modEnvironment = ExtendedVehicleManager.new(modName, modDirectory)
+end
 
-    -- add spec to vehicle types
-    local totalCount = 0
-    local modified = 0
-    for typeName, typeEntry in pairs(typeManager:getTypes()) do
-      totalCount = totalCount + 1
-      if SpecializationUtil.hasSpecialization(AnimatedVehicle, typeEntry.specializations) and
-          not SpecializationUtil.hasSpecialization(Rideable, typeEntry.specializations) and
-          not SpecializationUtil.hasSpecialization(ExtendedVehicle, typeEntry.specializations) then
-        typeManager:addSpecialization(typeName, modName .. ".extendedVehicle")
-        modified = modified + 1
-        logger:trace("Adding ExtendedVehicle spec to " .. typeName)
-      else
-        logger:trace("Not adding ExtendedVehicle spec to " .. typeName)
-      end
-    end
-
-    logger:info(string.format("Inserted ExtendedVehicle spec into %i of %i vehicle types", modified, totalCount))
+---Unload the mod when the mod is unselected and savegame is (re)loaded or game is closed.
+local function unload()
+  if not isLoaded() then
+    return
   end
+
+  if modEnvironment ~= nil then
+    modEnvironment:delete()
+    modEnvironment = nil
+  end
+end
+
+---Injects extended vehicle
+---@param typeManager table typeManager table
+local function validateTypes(typeManager)
+  if typeManager.typeName == "vehicle" then
+    ExtendedVehicleManager.installSpecializations(typeManager, g_specializationManager, modDirectory, modName, logger)
+  end
+end
+
+local function printSpecs()
+  logger:tPrint("g_vehicleConfigurationManager", g_vehicleConfigurationManager.configurations.cover, true)
+end
+
+---Prepended function: XMLFile.initInheritance
+---Adds xml injections to XMLFile
+---@param xmlFile XMLFile Instance of XMLFile
+local function preInitInheritance(xmlFile)
+  if not isLoaded() or modEnvironment.injectionManager == nil then
+    return
+  end
+
+  modEnvironment.injectionManager:checkParentXMLData(xmlFile)
+end
+
+---Appended function: XMLFile.initInheritance
+---Adds xml injections to XMLFile
+---@param xmlFile XMLFile Instance of XMLFile
+local function postInitInheritance(xmlFile)
+  if not isLoaded() or modEnvironment.injectionManager == nil then
+    return
+  end
+
+  modEnvironment.injectionManager:injectXMLData(xmlFile)
+end
+
+---Prepended function: VehicleSystem.consoleCommandReloadVehicle
+---@param vehicleSystem VehicleSystem
+---@param resetVehicle boolean Reset vehicle
+---@param radius number Radius to reload vehicle
+local function consoleCommandReloadVehicle(vehicleSystem, resetVehicle, radius)
+  if not isLoaded() or modEnvironment.injectionManager == nil then
+    return
+  end
+
+  modEnvironment.injectionManager:loadInjectionXMLs()
 end
 
 
 local function init()
+  FSBaseMission.delete = Utils.appendedFunction(FSBaseMission.delete, unload)
+  Mission00.load = Utils.prependedFunction(Mission00.load, load)
   -- install spec
-  TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, installSpec)
+  TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, validateTypes)
 
-  --Mission00.load = Utils.prependedFunction(Mission00.load, printSpecs)
+  --Cover.onLoad = Utils.overwrittenFunction(Cover.onLoad, coverOnLoad)
+
+  -- XMLInjectionsManager
+  XMLFile.initInheritance = Utils.prependedFunction(XMLFile.initInheritance, preInitInheritance)
+  XMLFile.initInheritance = Utils.appendedFunction(XMLFile.initInheritance, postInitInheritance)
+  VehicleSystem.consoleCommandReloadVehicle = Utils.prependedFunction(VehicleSystem.consoleCommandReloadVehicle, consoleCommandReloadVehicle)
 
   logger:info("Initialization complete")
 end
+
+-- save current mod name in global variable for later use in spec
+g_extendedVehicleModName = modName
 
 init()
 
