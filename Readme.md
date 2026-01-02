@@ -9,6 +9,7 @@ A Farming Simulator 25 mod that provides extended vehicle functionality, focusin
 - **Beacon Light Groups**: Group multiple beacon lights and control them via dedicated input bindings. Supports both toggle and button modes.
 - **Sound Groups**: Manage multiple sound effects (e.g., sirens, air horns) with easy switching and toggling.
 - **Pre-defined Actions**: Includes several default action bindings for common tasks like Rear Warning Systems (RWS), Stop flashes, and Sirens.
+- **Crossplay compatible**: As we all now consoles do not support scripts, you can use the default cover and foldable for consoles and this script for PC. See details below.
 
 ## Usage
 
@@ -32,7 +33,7 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
 #### Example Configuration
 
 ```xml
-<extendedVehicle>
+<extendedVehicle disableCover="false" disableFoldable="false">
     <beaconLightGroups>
         <!-- name: identifier for the group -->
         <!-- toggleInputButton: the action name to trigger this group -->
@@ -122,6 +123,10 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
 
 ### Attributes
 
+#### Extended Vehicle
+- `disableCover`: (Boolean) If true, it removes `<cover>` from the vehicle XML. Defaults to false.
+- `disableFoldable`: (Boolean) If true, it removes `<foldable>` from the vehicle XML. Defaults to false.
+
 #### Beacon Light Groups
 - `name`: (String) Name of the group.
 - `inputMode`: (String) `SWITCH` (default) or `BUTTON`.
@@ -144,6 +149,18 @@ To use this specialization in your vehicle, add the `extendedVehicle` specializa
 | `VD_EV_TOGGLE_SIREN` | `LAlt + Numpad 1` | Toggle Siren |
 | `VD_EV_SWITCH_SIREN` | `LAlt + Numpad 2` | Switch Siren Tone |
 | `VD_EV_AIR_HORN` | `LAlt + Numpad 3` | Air Horn / Bullhorn |
+
+## Crossplay Compatibility
+As we all now consoles do not support scripts due to that most emergency vehicles released on consoles use the `cover`
+specialization for Sirens and `foldable` for the rear warning system.
+
+To prevent two different versions of a mod, we have added two attributes to the `<extendedVehicle>` 
+tag: `disableCover` and `disableFoldable`. These attributes allow you to disable the cover and foldable features for PC,
+while keeping them enabled for Consoles. This ensures that the mod works seamlessly across both platforms and can use the extended Features on PC.
+
+### Limitations
+- Only works for RWS using ``VD_EV_TOGGLE_RWS`` as input action.
+- The visibility state of the RWS animation node must be set to visible in the i3d.
 
 ## Credits
 - **Author**: VertexDezign

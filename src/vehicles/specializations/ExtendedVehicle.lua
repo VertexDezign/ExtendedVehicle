@@ -4,6 +4,8 @@
 ---@field debugger GrisuDebug
 ---@field active boolean
 ---@field actionEvents table
+---@field disableCover boolean
+---@field disableFoldable boolean
 ---@field soundGroups table<integer, SoundGroup>
 ---@field beaconLightGroups table<integer, BeaconLightGroup>
 
@@ -27,6 +29,8 @@ function ExtendedVehicle.initSpecialization()
   local schema = Vehicle.xmlSchema
 
   schema:setXMLSpecializationType("ExtendedVehicle")
+  schema:register(XMLValueType.BOOL, "vehicle.extendedVehicle#disableFoldable", "True if foldable should be disable", false, true)
+  schema:register(XMLValueType.BOOL, "vehicle.extendedVehicle#disableCover", "True if cover should be disable", false, true)
 
   local beaconLightGroupKey = "vehicle.extendedVehicle.beaconLightGroups.beaconLightGroup(?)"
   schema:register(XMLValueType.STRING, beaconLightGroupKey .. "#name", "Beacon light group name", nil, true)
@@ -93,13 +97,15 @@ end
 
 function ExtendedVehicle:onLoad(savegame)
   self.spec_extendedVehicle = {
-    debugger = GrisuDebug:create("ExtendedVehicle"),
+    debugger = GrisuDebug:create("ExtendedVehicleSpec"),
     actionEvents = {},
     active = false,
   }
   local spec = self.spec_extendedVehicle
-  spec.debugger:setLogLvl(GrisuDebug.TRACE)
-  spec.debugger:trace("onLoad")
+  spec.debugger:setLogLvl(g_extendedVehicle:getLogLevel("specialization"))
+
+  spec.disableCover = self.xmlFile:getBool("vehicle.extendedVehicle#disableCover", false)
+  spec.disableFoldable = self.xmlFile:getBool("vehicle.extendedVehicle#disableFoldable", false)
 
   spec.beaconLightGroups = {}
   spec.beaconLightGroupsByToggleInput = {}
@@ -497,6 +503,7 @@ function ExtendedVehicle:loadBeaconLightGroupFromXML(xmlFile, key)
   ---@field inputMode InputMode
   ---@field toggleInputButton InputAction
   ---@field animation ExtendedVehicleAnimation
+  ---@field beaconLights table<integer, BeaconLight>
   local beaconLightGroup = {}
   beaconLightGroup.name = name
   beaconLightGroup.inputMode = xmlFile:getValue(key .. "#inputMode", ExtendedVehicle.INPUT_MODE.SWITCH)
