@@ -97,12 +97,12 @@ end
 
 function ExtendedVehicle:onLoad(savegame)
   self.spec_extendedVehicle = {
-    debugger = GrisuDebug:create("ExtendedVehicle"),
+    debugger = GrisuDebug:create("ExtendedVehicleSpec"),
     actionEvents = {},
     active = false,
   }
   local spec = self.spec_extendedVehicle
-  spec.debugger:setLogLvl(GrisuDebug.TRACE)
+  spec.debugger:setLogLvl(g_extendedVehicle:getLogLevel("specialization"))
 
   spec.disableCover = self.xmlFile:getBool("vehicle.extendedVehicle#disableCover", false)
   spec.disableFoldable = self.xmlFile:getBool("vehicle.extendedVehicle#disableFoldable", false)

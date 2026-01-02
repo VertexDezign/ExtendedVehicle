@@ -2,13 +2,14 @@
 ---@field injectionManager XMLInjectionsManager
 ExtendedVehicleManager = {}
 
+local extendedVehicleManager_mt = Class(ExtendedVehicleManager)
+
 function ExtendedVehicleManager.new(modName, modDirectory, customMt)
-  local self = setmetatable({}, customMt or interactiveControlManager_mt)
+  local self = setmetatable({}, customMt or extendedVehicleManager_mt)
 
   self.modName = modName
   self.modDirectory = modDirectory
   self.logger = GrisuDebug:create("ExtendedVehicleManager")
-  self.logger:setLogLvl(GrisuDebug.INFO)
 
   self.injectionManager = XMLInjectionsManager.new(modName, modDirectory)
 
@@ -42,4 +43,10 @@ function ExtendedVehicleManager.installSpecializations(typeManager, specializati
 
     logger:info(string.format("Inserted ExtendedVehicle spec into %i of %i vehicle types", modified, totalCount))
   end
+end
+
+---@param component string The component of which we want the log level
+---@return number
+function ExtendedVehicleManager:getLogLevel(component)
+  return GrisuDebug.LEVEL.INFO
 end

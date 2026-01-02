@@ -14,19 +14,23 @@
 GrisuDebug = {}
 GrisuDebug.__index = GrisuDebug
 
-GrisuDebug.TRACE = 1
-GrisuDebug.DEBUG = 2
-GrisuDebug.INFO = 3
-GrisuDebug.WARNING = 4
-GrisuDebug.ERROR = 5
-GrisuDebug.OFF = 6
+---@alias GrisuDebugLevel "TRACE" | "DEBUG" | "INFO" | "WARNING" | "ERROR" | "OFF"
+GrisuDebug.LEVEL = {
+  TRACE = 1,
+  DEBUG = 2,
+  INFO = 3,
+  WARNING = 4,
+  ERROR = 5,
+  OFF = 6,
+}
 
+---@param txt string
 function GrisuDebug.parseLogLevel(txt)
-  local lvl = GrisuDebug[txt]
+  local lvl = GrisuDebug.LEVEL[txt]
   if lvl ~= nil and type(lvl) == "number" then
     return lvl
   else
-    return GrisuDebug.INFO
+    return GrisuDebug.LEVEL.INFO
   end
 end
 
@@ -35,35 +39,36 @@ function GrisuDebug:create(name)
   local d = {} -- our new object
   setmetatable(d, GrisuDebug) -- make Account handle lookup
   d.name = name -- initialize our object
-  d.lvl = GrisuDebug.DEBUG
+  d.lvl = GrisuDebug.LEVEL.INFO
   return d
 end
 
+---@param lvl GrisuDebugLevel the log level
 function GrisuDebug:setLogLvl(lvl)
   self.lvl = lvl
 end
 
 function GrisuDebug:trace(txt, ...)
-  self:print(GrisuDebug.TRACE, nil, txt, ...)
+  self:print(GrisuDebug.LEVEL.TRACE, nil, txt, ...)
 end
 
 function GrisuDebug:debug(txt, ...)
-  self:print(GrisuDebug.DEBUG, nil, txt, ...)
+  self:print(GrisuDebug.LEVEL.DEBUG, nil, txt, ...)
 end
 
 ---@param txt string | function the info message. Can contain string-format placeholders
 function GrisuDebug:info(txt, ...)
-  self:print(GrisuDebug.INFO, nil, txt, ...)
+  self:print(GrisuDebug.LEVEL.INFO, nil, txt, ...)
 end
 
 ---@param txt string | function the warning message. Can contain string-format placeholders
 function GrisuDebug:warn(txt, ...)
-  self:print(GrisuDebug.WARNING, nil, txt, ...)
+  self:print(GrisuDebug.LEVEL.WARNING, nil, txt, ...)
 end
 
 ---@param txt string | function the error message. Can contain string-format placeholders
 function GrisuDebug:error(txt, ...)
-  self:print(GrisuDebug.ERROR, nil, txt, ...)
+  self:print(GrisuDebug.LEVEL.ERROR, nil, txt, ...)
 end
 
 ---Prints a xml warning to console and logfile
@@ -72,7 +77,7 @@ end
 ---@param ... any variable number of parameters. Depends on placeholders in warning message
 function GrisuDebug:xmlWarn(xmlFile, txt, ...)
   local filename = xmlFile:getFilename()
-  self:print(GrisuDebug.WARNING, filename, txt, ...)
+  self:print(GrisuDebug.LEVEL.WARNING, filename, txt, ...)
 end
 
 ---Prints a xml error to console and logfile'
@@ -81,7 +86,7 @@ end
 ---@param ... any variable number of parameters. Depends on placeholders in error message
 function GrisuDebug:xmlError(xmlFile, txt, ...)
   local filename = xmlFile:getFilename()
-  self:print(GrisuDebug.ERROR, filename, txt, ...)
+  self:print(GrisuDebug.LEVEL.ERROR, filename, txt, ...)
 end
 
 ---@param name string The name of the table
@@ -101,13 +106,13 @@ function GrisuDebug:print(lvl, id, txt, ...)
     return
   end
   local level = "TRACE"
-  if lvl == GrisuDebug.ERROR then
+  if lvl == GrisuDebug.LEVEL.ERROR then
     level = "ERROR"
-  elseif lvl == GrisuDebug.WARNING then
+  elseif lvl == GrisuDebug.LEVEL.WARNING then
     level = "WARN"
-  elseif lvl == GrisuDebug.INFO then
+  elseif lvl == GrisuDebug.LEVEL.INFO then
     level = "INFO"
-  elseif lvl == GrisuDebug.DEBUG then
+  elseif lvl == GrisuDebug.LEVEL.DEBUG then
     level = "DEBUG"
   end
 

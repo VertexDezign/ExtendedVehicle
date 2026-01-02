@@ -31,7 +31,7 @@ local sourceFiles = {
 
 -- create logger
 local logger = GrisuDebug:create("ExtendedVehiclesMain")
-logger:setLogLvl(GrisuDebug.TRACE)
+logger:setLogLvl(GrisuDebug.LEVEL.INFO)
 
 logger:trace("Loading lua files")
 for _, file in ipairs(sourceFiles) do
@@ -41,12 +41,6 @@ end
 ---Returns true when the current mod env is loaded, false otherwise.
 local function isLoaded()
   return modEnvironment ~= nil
-end
-
----Load the mod.
-local function load(mission)
-  assert(modEnvironment == nil)
-  modEnvironment = ExtendedVehicleManager.new(modName, modDirectory)
 end
 
 ---Unload the mod when the mod is unselected and savegame is (re)loaded or game is closed.
@@ -69,21 +63,6 @@ local function validateTypes(typeManager)
   end
 end
 
-local function printSpecs()
-  logger:tPrint("g_vehicleConfigurationManager", g_vehicleConfigurationManager.configurations.cover, true)
-end
-
----Prepended function: XMLFile.initInheritance
----Adds xml injections to XMLFile
----@param xmlFile XMLFile Instance of XMLFile
-local function preInitInheritance(xmlFile)
-  if not isLoaded() or modEnvironment.injectionManager == nil then
-    return
-  end
-
-  modEnvironment.injectionManager:checkParentXMLData(xmlFile)
-end
-
 ---Appended function: XMLFile.initInheritance
 ---Adds xml injections to XMLFile
 ---@param xmlFile XMLFile Instance of XMLFile
@@ -95,31 +74,18 @@ local function postInitInheritance(xmlFile)
   modEnvironment.injectionManager:injectXMLData(xmlFile)
 end
 
----Prepended function: VehicleSystem.consoleCommandReloadVehicle
----@param vehicleSystem VehicleSystem
----@param resetVehicle boolean Reset vehicle
----@param radius number Radius to reload vehicle
-local function consoleCommandReloadVehicle(vehicleSystem, resetVehicle, radius)
-  if not isLoaded() or modEnvironment.injectionManager == nil then
-    return
-  end
-
-  modEnvironment.injectionManager:loadInjectionXMLs()
-end
-
-
 local function init()
+  modEnvironment = ExtendedVehicleManager.new(modName, modDirectory)
+
+  -- cleanup
   FSBaseMission.delete = Utils.appendedFunction(FSBaseMission.delete, unload)
-  Mission00.load = Utils.prependedFunction(Mission00.load, load)
   -- install spec
   TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, validateTypes)
 
-  --Cover.onLoad = Utils.overwrittenFunction(Cover.onLoad, coverOnLoad)
-
   -- XMLInjectionsManager
-  XMLFile.initInheritance = Utils.prependedFunction(XMLFile.initInheritance, preInitInheritance)
   XMLFile.initInheritance = Utils.appendedFunction(XMLFile.initInheritance, postInitInheritance)
-  VehicleSystem.consoleCommandReloadVehicle = Utils.prependedFunction(VehicleSystem.consoleCommandReloadVehicle, consoleCommandReloadVehicle)
+
+  g_extendedVehicle = modEnvironment
 
   logger:info("Initialization complete")
 end
