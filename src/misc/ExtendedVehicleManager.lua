@@ -48,5 +48,5 @@ end
 ---@param component string The component of which we want the log level
 ---@return number
 function ExtendedVehicleManager:getLogLevel(component)
-  return GrisuDebug.LEVEL.INFO
+  return GrisuDebug.LEVEL.TRACE
 end

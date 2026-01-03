@@ -21,12 +21,16 @@ local sourceFiles = {
   -- manager
   "src/misc/ExtendedVehicleManager.lua",
 
-  "src/extendedVehicle/ExtendedVehicleAnimation.lua",
+  "src/extendedVehicle/animation/ExtendedVehicleAnimation.lua",
+
+  -- extensions
+  "src/extendedVehicle/Extension.lua",
+  "src/extendedVehicle/light/BeaconLightExtension.lua",
+  "src/extendedVehicle/light/events/AdditionalBeaconLightsEvent.lua",
 
   -- Events
   "src/extendedVehicle/events/CurrentExtendedSoundEvent.lua",
   "src/extendedVehicle/events/ExtendedSoundEvent.lua",
-  "src/extendedVehicle/events/AdditionalBeaconLightsEvent.lua",
 }
 
 -- create logger

@@ -1,5 +1,5 @@
 ---@class AdditionalBeaconLightsEvent
-
+---@field object ExtendedVehicle
 AdditionalBeaconLightsEvent = {}
 local additionalBeaconLightsEvent_event = Class(AdditionalBeaconLightsEvent, Event)
 
@@ -40,7 +40,10 @@ function AdditionalBeaconLightsEvent:run(connection)
     end
 
     if self.object ~= nil then
-        self.object:setBeaconLightGroupState(self.index, self.state, true)
+        local extension = self.object:getExtendedVehicleExtensionByName(BeaconLightExtension.NAME)
+        if extension ~= nil then
+            extension:setBeaconLightGroupState(self.index, self.state, true)
+        end
     end
 end
 
