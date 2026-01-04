@@ -14,3 +14,12 @@ function TableUtils.indexOf(table, element)
 
     return -1
 end
+
+---@param t table
+---@param predicate function
+function TableUtils.anyMatch(t, predicate)
+    for _, v in pairs(t) do
+        if predicate(v) then return true end
+    end
+    return false
+end

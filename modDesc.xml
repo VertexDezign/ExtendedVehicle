@@ -1,21 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="105">
     <author>VertexDezign</author>
-    <version>0.6.0.0</version>
+    <version>1.0.0.0-rc1</version>
     <title>
         <en>ExtendedVehicle</en>
-        <de>ExtendedVehicle</de>
+        <de>Erweiterte Fahrzeugfunktionen</de>
     </title>
     <description>
         <en>
-            <![CDATA[ExtendedVehicle specialization for advanced lighting and sound controls. Features include beacon light groups, sound groups (sirens, air horns, or anything else), and pre-defined actions for emergency and utility vehicles.
+            <![CDATA[ExtendedVehicle provides advanced control systems for vehicles, specifically designed for emergency services and utility vehicles.
 
-For more information and updates, visit our GitHub: https://github.com/VertexDezign/ExtendedVehicle]]>
+Main Features:
+- Beacon Light Groups: Create custom groups of beacon lights (e.g., Rear Warning Systems or Stop-Flashes) and control them via dedicated keybindings. Supports both Toggle and Button modes.
+- Sound Groups: Manage multiple acoustic signals like sirens or air horns. Includes functionality to switch between different tones and play accompanying animations.
+- Crossplay Compatibility: Specialized attributes allow modders to disable PC-specific script features while maintaining vanilla 'cover' or 'foldable' logic for consoles, ensuring one mod works on all platforms.
+- Pre-defined Actions: Default bindings for RWS, Sirens, and Air Horns are included for immediate use and streamlined keybinds over multiple mods.
+
+Integration:
+To use this in your mod, add 'FS25_extendedVehicle' as a dependency in your modDesc.xml and configure the <extendedVehicle> section in your vehicle XML.
+
+Documentation and Updates: https://github.com/VertexDezign/ExtendedVehicle]]>
         </en>
         <de>
-            <![CDATA[ExtendedVehicle-Spezialisierung für fortgeschrittene Licht- und Soundsteuerung. Zu den Funktionen gehören Rundumleuchten-Gruppen, Sound-Gruppen (Sirenen, Presslufthörner oder sonstige) und vordefinierte Aktionen für Einsatz- und Kommunalfahrzeuge.
+            <![CDATA[Erweiterte Fahrzeugfunktionen bietet fortschrittliche Steuerungssysteme für Fahrzeuge, speziell entwickelt für Einsatz- und Kommunalfahrzeuge.
 
-Weitere Informationen und Updates finden Sie auf GitHub: https://github.com/VertexDezign/ExtendedVehicle]]>
+Hauptfunktionen:
+- Rundumleuchten-Gruppen: Erstellen Sie eigene Gruppen für Kennleuchten (z. B. Heckwarnsysteme oder Stop-Blitz) und steuern Sie diese über eigene Tastenbelegungen. Unterstützt Schalter- und Taster-Modus.
+- Sound-Gruppen: Verwalten Sie mehrere akustische Signale wie Sirenen oder Presslufthörner. Inklusive Funktionen zum Umschalten zwischen verschiedenen Tönen und Abspielen von Animationen.
+- Crossplay-Kompatibilität: Spezielle Attribute erlauben es Moddern, PC-Skriptfunktionen zu deaktivieren, während für Konsolen die Standard-Funktionen (Cover/Foldable) erhalten bleiben. So wird nur eine Mod-Version für alle Plattformen benötigt.
+- Vordefinierte Aktionen: Standardbelegungen für HWS, Sirenen und Hörner sind für die sofortige Nutzung bereits enthalten und ermöglichen einheitliche Tastenbelegungen über mehrere Mods.
+
+Integration:
+Um diese Funktionen zu nutzen, fügen Sie 'FS25_extendedVehicle' als Dependency in Ihre modDesc.xml ein und konfigurieren Sie den Bereich <extendedVehicle> in Ihrer Fahrzeug-XML.
+
+Dokumentation und Updates: https://github.com/VertexDezign/ExtendedVehicle]]>
         </de>
     </description>
     <iconFilename>icon_EV.png</iconFilename>
