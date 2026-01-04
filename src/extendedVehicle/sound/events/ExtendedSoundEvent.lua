@@ -1,5 +1,5 @@
 ---@class ExtendedSoundEvent
-
+---@field object ExtendedVehicle
 ExtendedSoundEvent = {}
 local ExtendedSoundEvent_event = Class(ExtendedSoundEvent, Event)
 
@@ -40,7 +40,12 @@ function ExtendedSoundEvent:run(connection)
         g_server:broadcastEvent(self, false, connection, self.object)
     end
 
-    self.object:setExtendedSoundStateByIndex(self.index, self.state, true)
+    if self.object ~= nil then
+        local extension = self.object:getExtendedVehicleExtensionByName(SoundGroupExtension.NAME)
+        if extension ~= nil then
+            extension:setExtendedSoundStateByIndex(self.index, self.state, true)
+        end
+    end
 end
 
 function ExtendedSoundEvent.sendEvent(object, index, state, noEventSend)

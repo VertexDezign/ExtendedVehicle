@@ -1,5 +1,5 @@
 ---@class CurrentExtendedSoundEvent
-
+---@field object ExtendedVehicle
 CurrentExtendedSoundEvent = {}
 local currentExtendedSoundEvent_event = Class(CurrentExtendedSoundEvent, Event)
 
@@ -40,7 +40,12 @@ function CurrentExtendedSoundEvent:run(connection)
         g_server:broadcastEvent(self, false, connection, self.object)
     end
 
-    self.object:setSoundGroupCurrentSound(self.soundGroupIndex, self.index, true)
+    if self.object ~= nil then
+        local extension = self.object:getExtendedVehicleExtensionByName(SoundGroupExtension.NAME)
+        if extension ~= nil then
+            extension:setSoundGroupCurrentSound(self.soundGroupIndex, self.index, true)
+        end
+    end
 end
 
 function CurrentExtendedSoundEvent.sendEvent(object, soundGroupIndex, index, noEventSend)

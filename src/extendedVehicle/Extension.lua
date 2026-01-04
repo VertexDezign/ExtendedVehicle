@@ -22,6 +22,7 @@ local extension_mt = Class(Extension)
 ---@param basePath string Base path for path registrations
 function Extension.registerVehicleXMLPaths(schema, basePath)
 end
+
 ---Register XMLPaths to XMLSchema of the savegame
 ---@param schema XMLSchema Instance of XMLSchema to register path to
 ---@param basePath string Base path for path registrations

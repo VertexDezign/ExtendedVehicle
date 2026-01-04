@@ -14,8 +14,6 @@
 ---@field beaconLights table<integer, BeaconLight>
 
 ---@class BeaconLightExtension : Extension
----@field logger GrisuDebug
----@field vehicle ExtendedVehicle
 BeaconLightExtension = {}
 BeaconLightExtension.NAME = "BeaconLightExtension"
 local beaconLightExtension_mt = Class(BeaconLightExtension, Extension)
@@ -93,7 +91,7 @@ function BeaconLightExtension:loadBeaconLightGroupFromXML(xmlFile, key)
   beaconLightGroup.isActive = false
   beaconLightGroup.beaconLights = {}
 
-  local animation = ExtendedVehicleAnimation.new(self)
+  local animation = ExtendedVehicleAnimation.new(self.vehicle)
   if animation:loadFromXML(xmlFile, key .. ".animation") then
     beaconLightGroup.animation = animation
   end
