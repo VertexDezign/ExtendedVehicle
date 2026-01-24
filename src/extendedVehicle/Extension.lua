@@ -29,6 +29,9 @@ end
 function Extension.registerSavegameXMLPaths(schema, basePath)
 end
 
+function Extension.registerInteractiveControl()
+end
+
 ---Creates new instance of Extension
 ---@param vehicle ExtendedVehicle
 ---@param name string The name of this extension

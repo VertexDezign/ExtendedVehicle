@@ -48,6 +48,10 @@ local function isLoaded()
   return modEnvironment ~= nil
 end
 
+local function load(mission)
+
+end
+
 ---Unload the mod when the mod is unselected and savegame is (re)loaded or game is closed.
 local function unload()
   if not isLoaded() then
@@ -64,6 +68,12 @@ end
 ---@param typeManager table typeManager table
 local function validateTypes(typeManager)
   if typeManager.typeName == "vehicle" then
+    -- register ic, load seems to be to late for the xml schemas and init is too early as we load before IC
+    if FS25_interactiveControl ~= nil and FS25_interactiveControl.InteractiveFunctions ~= nil then
+      logger:info("Found FS25_interactiveControl, register IC extensions")
+      BeaconLightExtension.registerInteractiveControl(FS25_interactiveControl.InteractiveFunctions)
+    end
+
     ExtendedVehicleManager.installSpecializations(typeManager, g_specializationManager, modDirectory, modName, logger)
   end
 end
@@ -82,6 +92,8 @@ end
 local function init()
   modEnvironment = ExtendedVehicleManager.new(modName, modDirectory)
 
+  -- load
+  Mission00.load = Utils.prependedFunction(Mission00.load, load)
   -- cleanup
   FSBaseMission.delete = Utils.appendedFunction(FSBaseMission.delete, unload)
   -- install spec

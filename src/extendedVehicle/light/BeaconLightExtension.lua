@@ -43,6 +43,55 @@ function BeaconLightExtension.registerVehicleXMLPaths(schema, basePath)
   BeaconLight.registerVehicleXMLPaths(schema, beaconLightGroupKey .. ".beaconLight(?)")
 end
 
+function BeaconLightExtension.registerICFunctionSchema(schema, path)
+  schema:register(XMLValueType.STRING, path .. ".enhancedVehicle.beaconLightGroup#name", "Beacon light group name to be controlled", true)
+end
+
+function BeaconLightExtension.icDataLoad(xmlFile, key, data, errorMsg)
+
+  data.beaconLightGroupName = xmlFile:getValue(key .. ".enhancedVehicle.beaconLightGroup#name", nil, true)
+
+  if data.beaconLightGroupName == nil then
+    Logging.xmlWarning(xmlFile, "Failed to load beaconLightGroup name, ignoring control\nSet value '%s.beaconLightGroup#name' to use function: %s", key, key, errorMsg)
+    return false
+  end
+  return true
+end
+
+function BeaconLightExtension.registerInteractiveControl(icfn)
+  icfn.addFunction("VD_EV_LIGHTS_BEACON_TOGGLE", {
+    schemaFunc = BeaconLightExtension.registerICFunctionSchema,
+    loadFunc = function(xmlFile, key, data)
+      return BeaconLightExtension.icDataLoad(xmlFile, key, data, "VD_EV_LIGHTS_BEACON_TOGGLE")
+    end,
+    posFunc = function(target, data, noEventSend)
+      if noEventSend then
+        return
+      end
+      ---@type BeaconLightExtension
+      local extension = target:getExtendedVehicleExtensionByName(BeaconLightExtension.NAME)
+
+      for index, beaconLightGroup in ipairs(extension.beaconLightGroups) do
+        if beaconLightGroup.name == data.beaconLightGroupName then
+          extension:setBeaconLightGroupState(index, not beaconLightGroup.isActive)
+          return
+        end
+      end
+    end,
+    updateFunc = function(target, data)
+      ---@type BeaconLightExtension
+      local extension = target:getExtendedVehicleExtensionByName(BeaconLightExtension.NAME)
+      for index, beaconLightGroup in ipairs(extension.beaconLightGroups) do
+        if beaconLightGroup.name == data.beaconLightGroupName then
+          return beaconLightGroup.isActive
+        end
+      end
+
+      return nil
+    end
+  })
+end
+
 ---@param xmlFile XMLFile Instance of XMLFile
 ---@return boolean loaded True if loading succeeded, false otherwise
 function BeaconLightExtension:load(xmlFile)
@@ -224,6 +273,7 @@ end
 ---@param actionName string
 ---@param inputValue number
 function BeaconLightExtension.actionEventToggleBeaconLightGroup(self, actionName, inputValue, callbackState, isAnalog)
+  ---@type BeaconLightExtension
   local extension = self:getExtendedVehicleExtensionByName(BeaconLightExtension.NAME)
 
   local beaconLightGroup = extension:getBeaconLightGroupByToggleInput(actionName)

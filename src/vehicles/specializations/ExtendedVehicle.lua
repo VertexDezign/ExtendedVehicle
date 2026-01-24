@@ -18,6 +18,7 @@ ExtendedVehicle.INPUT_MODE = {
 }
 
 function ExtendedVehicle.initSpecialization()
+  print("ExtendedVehicle.initSpecialization")
   local schema = Vehicle.xmlSchema
   local basePath = "vehicle.extendedVehicle"
 
